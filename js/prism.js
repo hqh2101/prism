@@ -2,14 +2,12 @@
 //Responsive
 //ControlZ + array implementaton + redraw everytime
 //mouse circle
-//
 var brushSize;
 var strokes = [];
 
 function setup(){
 	createCanvas(windowWidth, windowHeight);
 	background('black');
-	noLoop();
   brushSize = 30;
 }
 
@@ -28,14 +26,9 @@ function drawTri(){
 	let y3 = mouseY + Math.floor((0.5-Math.random())*brushSize);
 	noStroke();
 
-	fill('rgba('+rndColor()+','+rndColor()+','+rndColor()+',0.1)');
+	var color = 'rgba('+rndColor()+','+rndColor()+','+rndColor()+',0.1)';
   //draw triangle
-	triangle(x1, y1, x2, y2, x3, y3);
-}
-
-function drawMultipleTriangles(x){
-	for(let i = 0; i < x; i++)
-		drawTri();
+	return [x1,x2,x3,y1,y2,y3,color];
 }
 
 function rndColor(){
@@ -43,18 +36,28 @@ function rndColor(){
 }
 
 function draw(){
-  //TODO allow user to change this number somehow
-	drawMultipleTriangles(5);
+  background(0);
+  //draw background
+  //draw all triangles in array
+  //draw circle around mouse
+  mouseCircle();
 }
 
-function mousePressed(){
-  draw();
-}
+// function mousePressed(){
+//   draw();
+// }
 
-function mouseDragged(){
-  draw();
-}
+// function mouseDragged(){
+//   draw();
+// }
 
+function handleStroke(){
+  var stroke = [];
+  if(mouseIsPressed === true){
+    stroke.push()
+  }
+  strokes.push(stroke);
+}
 
 //change brush weight
 function mouseWheel(){
@@ -72,3 +75,14 @@ var saveButton = document.getElementById("save-button");
 saveButton.onclick = function(){
   saveCanvas('myPrism', 'jpg');
 };
+
+//circle around mouse
+function mouseCircle(){
+  push();
+    stroke('white');
+    strokeWeight(1);
+    noFill();
+    ellipse(mouseX,mouseY,brushSize,brushSize);
+  pop();
+  console.log("drawing mouse circle");
+}
