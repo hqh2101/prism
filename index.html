@@ -3,15 +3,46 @@
 <head>
 	<title>Prism</title>
 </head>
+<link href="https://fonts.googleapis.com/css?family=Comfortaa" rel="stylesheet">
 <style type="text/css">
 	body {
 		padding: 0;
 		margin: 0;
 		} 
+	h1 {
+		font-size: 30px;
+		color: white;
+		z-index: 100px;
+		font-family: 'Comfortaa', cursive;
+		position: fixed;
+		text-align: center;
+		width: 75%;
+		left:50%;
+		margin-left: -37.5%;
+	}
 	canvas {
 		display: block;
 	}
+	button {
+		color: white;
+		position: fixed;
+		z-index: 100;
+		bottom: 20px;
+		right: 20px;
+		font-size: 20px;
+		background-color: black;
+		border: 1px solid white;
+		border-radius: 8px;
+		padding-left: 20px;
+		padding-right: 20px;
+		padding-bottom: 10px;
+		padding-top: 10px;
+		cursor: pointer;
+	}
 </style>
+<h1>prism</h1>
+
+<button id="save-button">save</button>
 <body>
 <script src= "https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.min.js" type="text/javascript"></script>
 <script src= "https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/addons/p5.dom.min.js" type="text/javascript"></script>
