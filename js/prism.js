@@ -1,13 +1,13 @@
 //TODO:
-//Responsive
+//Responsive resize but canvas is still ok
 //ControlZ + array implementaton + redraw everytime
-//mouse circle
 //change color
-//resize but canvas is still ok
 //Hide mouse while exporting
 //Performance: create a jpeg every few strokes to limt ctrl z and limit speed, then replace background image
+//Usability: show user how to use software (undo redo)
 var brushSize,currentStroke;
 var strokes = [];
+var density;
 
 
 function setup(){
@@ -15,6 +15,7 @@ function setup(){
 	background('black');
   brushSize = 30;
   currentStroke = 0;
+  density = 5;
 }
 
 function windowResized() {
@@ -24,8 +25,8 @@ function windowResized() {
 
 function tri(){
   //random triangle vertices
-	let x1 = mouseX + Math.floor((0.5-Math.random())*brushSize);
-	let x2 = mouseX + Math.floor((0.5-Math.random())*brushSize);
+	let x1 = mouseX + Math.floor( (0.5-Math.random() )*brushSize);
+	let x2 = mouseX + Math.floor( (0.5-Math.random() )*brushSize);
 	let x3 = mouseX + Math.floor((0.5-Math.random())*brushSize);
 	let y1 = mouseY + Math.floor((0.5-Math.random())*brushSize);
 	let y2 = mouseY + Math.floor((0.5-Math.random())*brushSize);
@@ -35,7 +36,7 @@ function tri(){
 	var color = 'rgba('+rndColor()+','+rndColor()+','+rndColor()+',0.1)';
   
   // console.log(x1,x2,x3,y1,y2,y3,color);
-	return [x1,x2,x3,y1,y2,y3,color];
+	return [x1,y1,x2,y2,x3,y3,color];
 }
 
 function rndColor(){
@@ -71,7 +72,8 @@ function mousePressed(){
 }
 
 function mouseDragged(){
-  strokes[currentStroke-1].push(tri());
+  for(let i = 0; i < density; i++)
+    strokes[currentStroke-1].push(tri());
 }
 
 
@@ -91,7 +93,7 @@ function keyTyped(){
   if(key === 'z' && currentStroke > 0){
       currentStroke--;
   }else if (key === 'y' && currentStroke < strokes.length){
-    
+    currentStroke++;
   }
 }
 //change brush weight
