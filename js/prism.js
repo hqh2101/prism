@@ -2,16 +2,14 @@
 //Responsive resize but canvas is still ok
 //ControlZ + array implementaton + redraw everytime
 //change color
-//Hide mouse while exporting
 //can't click in corner
 //density opacity on the screen
 //Performance: create a jpeg every few strokes to limt ctrl z and limit speed, then replace background image
 //Usability: show user how to use software (undo redo)
 
-var brushSize,currentStroke,strokes,density,opacity;
+var brushSize,currentStroke,strokes,density,opacity,saving,counter;
 
 var info = document.getElementById("info");
-
 
 function setup(){
 	createCanvas(windowWidth, windowHeight);
@@ -21,6 +19,8 @@ function setup(){
   density = 5;
   strokes = [];
   opacity = 0.2;
+  counter = 0;
+  saving = false;
   updateInfo();
 }
 
@@ -52,7 +52,14 @@ function rndColor(){
 function draw(){
   background(0);
   drawStrokes();
-  mouseCircle();
+  if(!saving)
+    mouseCircle();
+  else if(saving && counter > 2){
+    saveCanvas('myPrism', 'jpg');
+    saving = false;
+    counter = 0;
+  } else
+    counter++;
   updateInfo();
 }
 
@@ -134,7 +141,8 @@ function mouseWheel(){
 var saveButton = document.getElementById("save-button");
 
 saveButton.onclick = function(){
-  saveCanvas('myPrism', 'jpg');
+  saving = true;
+  currentStroke--;
 };
 
 //reset canvas
