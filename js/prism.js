@@ -1,15 +1,15 @@
 //TODO:
-//Responsive resize but canvas is still ok
-//ControlZ + array implementaton + redraw everytime
+//ControlZ
 //change color
-//can't click in corner
-//density opacity on the screen
+//put all controls in one div
 //Performance: create a jpeg every few strokes to limt ctrl z and limit speed, then replace background image
 //Usability: show user how to use software (undo redo)
 
-var brushSize,currentStroke,strokes,density,opacity,saving,counter;
+var brushSize,currentStroke,strokes,density,opacity,saving,counter,validStroke;
 
 var info = document.getElementById("info");
+
+var slider = document.getElementById("opacity-slider");
 
 function setup(){
 	createCanvas(windowWidth, windowHeight);
@@ -21,6 +21,7 @@ function setup(){
   opacity = 0.2;
   counter = 0;
   saving = false;
+  validStroke = false;
   updateInfo();
 }
 
@@ -54,7 +55,7 @@ function draw(){
   drawStrokes();
   if(!saving)
     mouseCircle();
-  else if(saving && counter > 2){
+  else if(saving && counter > 1){
     saveCanvas('myPrism', 'jpg');
     saving = false;
     counter = 0;
@@ -78,21 +79,29 @@ function drawStrokes(){
 }
 
 function mousePressed(){
-  var newStroke = [];
-  if(currentStroke === strokes.length)
-    strokes.push(newStroke);
-  else if (currentStroke < strokes.length){
-    strokes[currentStroke] = newStroke;
+  if(mouseX > 220 && mouseY < windowHeight - 50){
+    validStroke = true;
+    var newStroke = [];
+    if(currentStroke === strokes.length)
+      strokes.push(newStroke);
+    else if (currentStroke < strokes.length){
+      strokes[currentStroke] = newStroke;
+    }
+    currentStroke++;
+    strokes[currentStroke-1].push(tri());
   }
-  currentStroke++;
-  strokes[currentStroke-1].push(tri());
 }
 
 function mouseDragged(){
-  for(let i = 0; i < density; i++)
+  if(validStroke){
+    for(let i = 0; i < density; i++)
     strokes[currentStroke-1].push(tri());
-}
+  }
+ }
 
+function mouseReleased(){
+  validStroke = false;
+}
 
 function handleStroke(){
   var stroke = [];
@@ -115,16 +124,21 @@ function keyTyped(){
 }
 
 //change opacity
-function keyPressed(){
-  if (keyCode === LEFT_ARROW && opacity > 0.15) {
-    opacity -= 0.1;
-  } else if (keyCode === RIGHT_ARROW && opacity < 0.95) {
-    opacity += 0.1;
-  } else if (keyCode === UP_ARROW && opacity < 10) {
-    density += 1;
-  } else if (keyCode === DOWN_ARROW && density > 1) {
-    density -= 1;
-  }
+// function keyPressed(){
+//   if (keyCode === LEFT_ARROW && opacity > 0.15) {
+//     opacity -= 0.1;
+//   } else if (keyCode === RIGHT_ARROW && opacity < 0.95) {
+//     opacity += 0.1;
+//   } else if (keyCode === UP_ARROW && density < 10) {
+//     density += 1;
+//   } else if (keyCode === DOWN_ARROW && density > 1) {
+//     density -= 1;
+//   }
+// }
+
+// Update the current slider value (each time you drag the slider handle)
+slider.oninput = function() {
+    opacity = this.value/100;
 }
 
 //change brush weight
