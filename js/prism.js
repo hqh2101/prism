@@ -1,4 +1,6 @@
 //TODO:
+//OPTIMIZE + connect to button + automatic
+//opacity with keyboard 
 //ControlZ
 //change color
 //Performance: create a jpeg every few strokes to limt ctrl z and limit speed, then replace background image
@@ -20,7 +22,7 @@ function setup(){
   counter = 0;
   saving = false;
   validStroke = false;
-  changingBrush = false;
+  // changingBrush = false;
   updateInfo();
 }
 
@@ -31,15 +33,15 @@ function windowResized() {
 
 function tri(){
   //random triangle vertices
-	let x1 = mouseX + Math.floor( (0.5-Math.random() )*brushSize);
-	let x2 = mouseX + Math.floor( (0.5-Math.random() )*brushSize);
+	let x1 = mouseX + Math.floor( (0.5-Math.random())*brushSize);
+	let x2 = mouseX + Math.floor( (0.5-Math.random())*brushSize);
 	let x3 = mouseX + Math.floor((0.5-Math.random())*brushSize);
 	let y1 = mouseY + Math.floor((0.5-Math.random())*brushSize);
 	let y2 = mouseY + Math.floor((0.5-Math.random())*brushSize);
 	let y3 = mouseY + Math.floor((0.5-Math.random())*brushSize);
 	noStroke();
 
-	var color = 'rgba('+rndColor()+','+rndColor()+','+rndColor()+',' + opacity/100 + ')';
+	var color = 'rgba('+rndColor()+','+rndColor()+','+rndColor()+',' + (opacity/100) + ')';
   
   // console.log(x1,x2,x3,y1,y2,y3,color);
 	return [x1,y1,x2,y2,x3,y3,color];
@@ -62,13 +64,12 @@ function draw(){
   } else
      counter++;
 
-
-  if(keyIsDown(SHIFT)){
-    opacity = Math.ceil((1 - mouseY/windowHeight)*100);
-    // brushSize = Math.ceil(mouseX/windowWidth*500);
-    changingBrush = true;
-  } else
-    changingBrush = false;
+  // //old way of changing opacity
+  // if(keyIsDown(SHIFT)){
+  //   opacity = Math.ceil((1 - mouseY/windowHeight)*100);
+  //   changingBrush = true;
+  // } else
+  //   changingBrush = false;
 
   updateInfo();
 }
@@ -89,7 +90,7 @@ function drawStrokes(){
 
 function mousePressed(){
   //this is for if there is an area on the screen the user can't click on 
-  if(mouseY < windowHeight - 70){
+  if(true){
     validStroke = true;
     var newStroke = [];
     if(currentStroke === strokes.length)
@@ -123,21 +124,27 @@ function handleStroke(){
 
 //_____________________________________________end of draw code
 
-//undo + redo
+//undo + redo + change opacity
 function keyTyped(){
   if(key === 'z' && currentStroke > 0){
       currentStroke--;
   }else if (key === 'y' && currentStroke < strokes.length){
     currentStroke++;
+  }else if (!isNaN(parseInt(key,10))){
+    var number = parseInt(key,10)*10;
+    if(number !== 0)
+      opacity = number;
+    else
+      opacity = 100;
   }
 }
 
 //change brush weight
 function mouseWheel(){
   if(event.delta<0 && brushSize < 500)
-    brushSize += 10;
+    brushSize += 4;
   else if(brushSize > 10){
-      brushSize -=10;
+      brushSize -=4;
   }
 }
 
@@ -171,12 +178,12 @@ function mouseCircle(){
   push();
     stroke('white');
     strokeWeight(1);
-    if(!changingBrush){
+    // if(!changingBrush){
       noFill();
       ellipse(mouseX,mouseY,brushSize,brushSize);
-    }else{
-      fill('rgba(255,255,255,' + opacity/100 + ')');
-      ellipse(windowWidth/2,windowHeight/2,brushSize,brushSize);
-    }
+    // }else{
+    //   fill('rgba(255,255,255,' + opacity/100 + ')');
+    //   ellipse(windowWidth/2,windowHeight/2,brushSize,brushSize);
+    // }
   pop();
 }
