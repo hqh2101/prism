@@ -9,7 +9,8 @@ var brushSize,currentStroke,strokes,density,opacity,saving,counter,validStroke;
 
 var info = document.getElementById("info");
 
-var slider = document.getElementById("opacity-slider");
+var opacitySlider = document.getElementById("opacity-slider");
+var brushSlider = document.getElementById("brush-slider");
 
 function setup(){
 	createCanvas(windowWidth, windowHeight);
@@ -65,7 +66,7 @@ function draw(){
 }
 
 function updateInfo(){
-  info.innerHTML = "opacity: " + Math.ceil(opacity*10) + " density: " + density;
+  info.innerHTML = "opacity: " + Math.ceil(opacity*10) + " brush size: " + brushSize;
 }
 //_______________________________________________draw code
 
@@ -123,32 +124,23 @@ function keyTyped(){
   }
 }
 
-//change opacity
-// function keyPressed(){
-//   if (keyCode === LEFT_ARROW && opacity > 0.15) {
-//     opacity -= 0.1;
-//   } else if (keyCode === RIGHT_ARROW && opacity < 0.95) {
-//     opacity += 0.1;
-//   } else if (keyCode === UP_ARROW && density < 10) {
-//     density += 1;
-//   } else if (keyCode === DOWN_ARROW && density > 1) {
-//     density -= 1;
-//   }
-// }
-
 // Update the current slider value (each time you drag the slider handle)
-slider.oninput = function() {
+opacitySlider.oninput = function() {
     opacity = this.value/100;
+}
+
+brushSlider.oninput = function() {
+    brushSize = this.value;
 }
 
 //change brush weight
 function mouseWheel(){
-  if(event.delta<0)
+  if(event.delta<0 && brushSize < 1000)
     brushSize += 10;
-  else{
-    if(brushSize>10)
+  else if(brushSize > 10){
       brushSize -=10;
   }
+  brushSlider.value = brushSize;
 }
 
 //save image

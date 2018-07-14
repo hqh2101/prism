@@ -47,9 +47,6 @@
 
 	.slide-container{
 		width: 200px;
-		position: fixed;
-		bottom: 50px;
-		left:20px;
 	}
 
 	.slider {
@@ -62,7 +59,10 @@
 	    opacity: 0.3; /* Set transparency (for mouse-over effects on hover) */
 	    -webkit-transition: .2s; /* 0.2 seconds transition on hover */
 	    transition: opacity .2s;
+	    border-radius: 15px;
+	    width: 200px;
 	}
+
 
 	.slider:hover{
 		opacity: 0.5;
@@ -73,6 +73,7 @@
 	    appearance: none;
 	    width: 25px; /* Set a specific slider handle width */
 	    height: 25px; /* Slider handle height */
+	    border-radius: 50%;
 	    background: white; /* Green background */
 	    cursor: pointer; /* Cursor on hover */
 	}
@@ -107,6 +108,19 @@
 		left: 20px;
 		font-family: 'Comfortaa', cursive;
 	}
+
+	#brush-slider {
+		left: 20px;
+		bottom: 90px;
+		position: fixed;
+	}
+
+	#opacity-slider {
+		bottom: 50px;
+		left:20px;
+		position: fixed;
+	}
+
 </style>
 <h1 style="-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none;" 
  unselectable="on"
@@ -124,8 +138,13 @@
  unselectable="on"
  onselectstart="return false;" 
  onmousedown="return false;">reset</button>
- <div class="slide-container">
+ 
+<div class="slide-container">
   <input type="range" min="1" max="100" value="50" class="slider" id="opacity-slider">
+</div>
+
+<div class="slide-container">
+  <input type="range" min="10" max="1000" value="50" class="slider" id="brush-slider">
 </div>
 
 <body>
