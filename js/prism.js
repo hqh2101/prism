@@ -1,16 +1,13 @@
 //TODO:
 //ControlZ
 //change color
-//put all controls in one div
 //Performance: create a jpeg every few strokes to limt ctrl z and limit speed, then replace background image
 //Usability: show user how to use software (undo redo)
 
-var brushSize,currentStroke,strokes,density,opacity,saving,counter,validStroke;
+var brushSize,currentStroke,strokes,density,opacity,saving,counter,validStroke,changingBrush;
 
+var helpContainer = document.getElementById("help-container");
 var info = document.getElementById("info");
-
-var opacitySlider = document.getElementById("opacity-slider");
-var brushSlider = document.getElementById("brush-slider");
 
 function setup(){
 	createCanvas(windowWidth, windowHeight);
@@ -19,10 +16,11 @@ function setup(){
   currentStroke = 0;
   density = 5;
   strokes = [];
-  opacity = 0.2;
+  opacity = 20;
   counter = 0;
   saving = false;
   validStroke = false;
+  changingBrush = false;
   updateInfo();
 }
 
@@ -41,7 +39,7 @@ function tri(){
 	let y3 = mouseY + Math.floor((0.5-Math.random())*brushSize);
 	noStroke();
 
-	var color = 'rgba('+rndColor()+','+rndColor()+','+rndColor()+',' + opacity + ')';
+	var color = 'rgba('+rndColor()+','+rndColor()+','+rndColor()+',' + opacity/100 + ')';
   
   // console.log(x1,x2,x3,y1,y2,y3,color);
 	return [x1,y1,x2,y2,x3,y3,color];
@@ -54,6 +52,7 @@ function rndColor(){
 function draw(){
   background(0);
   drawStrokes();
+
   if(!saving)
     mouseCircle();
   else if(saving && counter > 1){
@@ -61,12 +60,21 @@ function draw(){
     saving = false;
     counter = 0;
   } else
-    counter++;
+     counter++;
+
+
+  if(keyIsDown(SHIFT)){
+    opacity = Math.ceil((1 - mouseY/windowHeight)*100);
+    // brushSize = Math.ceil(mouseX/windowWidth*500);
+    changingBrush = true;
+  } else
+    changingBrush = false;
+
   updateInfo();
 }
 
 function updateInfo(){
-  info.innerHTML = "opacity: " + Math.ceil(opacity*10) + " brush size: " + brushSize;
+  info.innerHTML = "opacity: " + opacity + "    brush size: " + brushSize;
 }
 //_______________________________________________draw code
 
@@ -80,7 +88,8 @@ function drawStrokes(){
 }
 
 function mousePressed(){
-  if(mouseX > 220 && mouseY < windowHeight - 50){
+  //this is for if there is an area on the screen the user can't click on 
+  if(mouseY < windowHeight - 70){
     validStroke = true;
     var newStroke = [];
     if(currentStroke === strokes.length)
@@ -114,8 +123,7 @@ function handleStroke(){
 
 //_____________________________________________end of draw code
 
-//undo
-
+//undo + redo
 function keyTyped(){
   if(key === 'z' && currentStroke > 0){
       currentStroke--;
@@ -124,23 +132,13 @@ function keyTyped(){
   }
 }
 
-// Update the current slider value (each time you drag the slider handle)
-opacitySlider.oninput = function() {
-    opacity = this.value/100;
-}
-
-brushSlider.oninput = function() {
-    brushSize = this.value;
-}
-
 //change brush weight
 function mouseWheel(){
-  if(event.delta<0 && brushSize < 1000)
+  if(event.delta<0 && brushSize < 500)
     brushSize += 10;
   else if(brushSize > 10){
       brushSize -=10;
   }
-  brushSlider.value = brushSize;
 }
 
 //save image
@@ -159,12 +157,26 @@ document.getElementById("reset-button").onclick = function(){
   currentStroke = 0;
 };
 
+//show help
+function hover(element){
+  helpContainer.style.display = "block";
+}
+
+function unhover(element){
+  helpContainer.style.display = "none";
+}
+
 //circle around mouse
 function mouseCircle(){
   push();
     stroke('white');
     strokeWeight(1);
-    noFill();
-    ellipse(mouseX,mouseY,brushSize,brushSize);
+    if(!changingBrush){
+      noFill();
+      ellipse(mouseX,mouseY,brushSize,brushSize);
+    }else{
+      fill('rgba(255,255,255,' + opacity/100 + ')');
+      ellipse(windowWidth/2,windowHeight/2,brushSize,brushSize);
+    }
   pop();
 }
