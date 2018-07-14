@@ -3,19 +3,25 @@
 //ControlZ + array implementaton + redraw everytime
 //change color
 //Hide mouse while exporting
+//can't click in corner
+//density opacity on the screen
 //Performance: create a jpeg every few strokes to limt ctrl z and limit speed, then replace background image
 //Usability: show user how to use software (undo redo)
-var brushSize,currentStroke;
-var strokes = [];
-var density;
+
+var brushSize,currentStroke,strokes,density,opacity;
+
+var info = document.getElementById("info");
 
 
 function setup(){
 	createCanvas(windowWidth, windowHeight);
 	background('black');
-  brushSize = 30;
+  brushSize = 60;
   currentStroke = 0;
   density = 5;
+  strokes = [];
+  opacity = 0.2;
+  updateInfo();
 }
 
 function windowResized() {
@@ -33,7 +39,7 @@ function tri(){
 	let y3 = mouseY + Math.floor((0.5-Math.random())*brushSize);
 	noStroke();
 
-	var color = 'rgba('+rndColor()+','+rndColor()+','+rndColor()+',0.1)';
+	var color = 'rgba('+rndColor()+','+rndColor()+','+rndColor()+',' + opacity + ')';
   
   // console.log(x1,x2,x3,y1,y2,y3,color);
 	return [x1,y1,x2,y2,x3,y3,color];
@@ -47,8 +53,12 @@ function draw(){
   background(0);
   drawStrokes();
   mouseCircle();
+  updateInfo();
 }
 
+function updateInfo(){
+  info.innerHTML = "opacity: " + Math.ceil(opacity*10) + " density: " + density;
+}
 //_______________________________________________draw code
 
 function drawStrokes(){
@@ -96,6 +106,20 @@ function keyTyped(){
     currentStroke++;
   }
 }
+
+//change opacity
+function keyPressed(){
+  if (keyCode === LEFT_ARROW && opacity > 0.15) {
+    opacity -= 0.1;
+  } else if (keyCode === RIGHT_ARROW && opacity < 0.95) {
+    opacity += 0.1;
+  } else if (keyCode === UP_ARROW && opacity < 10) {
+    density += 1;
+  } else if (keyCode === DOWN_ARROW && density > 1) {
+    density -= 1;
+  }
+}
+
 //change brush weight
 function mouseWheel(){
   if(event.delta<0)
@@ -111,6 +135,14 @@ var saveButton = document.getElementById("save-button");
 
 saveButton.onclick = function(){
   saveCanvas('myPrism', 'jpg');
+};
+
+//reset canvas
+document.getElementById("reset-button").onclick = function(){
+  clear();
+  background(0);
+  strokes = [];
+  currentStroke = 0;
 };
 
 //circle around mouse

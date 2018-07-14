@@ -19,6 +19,7 @@
 		width: 75%;
 		left:50%;
 		margin-left: -37.5%;
+
 	}
 	canvas {
 		display: block;
@@ -28,8 +29,6 @@
 		color: white;
 		position: fixed;
 		z-index: 100;
-		bottom: 20px;
-		right: 20px;
 		font-size: 20px;
 		background-color: black;
 		border: 1px solid white;
@@ -40,14 +39,52 @@
 		padding-top: 10px;
 		cursor: pointer;
 	}
-</style>
-<h1>prism</h1>
 
-<button id="save-button">export</button>
+	#save-button {
+		bottom: 20px;
+		right: 20px;
+	}
+
+	#reset-button {
+		bottom: 20px;
+		right: 150px;
+	}
+
+	#info {
+		color: white;
+		position: fixed;
+		z-index: 100;
+		font-size: 20px;
+		background-color: black;
+		padding-left: 20px;
+		padding-right: 20px;
+		padding-bottom: 10px;
+		padding-top: 10px;
+		bottom: 20px;
+		left: 20px;
+		font-family: 'Comfortaa', cursive;
+	}
+</style>
+<h1 style="-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none;" 
+ unselectable="on"
+ onselectstart="return false;" 
+ onmousedown="return false;">prism</h1>
+<div id="info" style="-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none;" 
+ unselectable="on"
+ onselectstart="return false;" 
+ onmousedown="return false;"></div>
+<button id="save-button" style="-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none;" 
+ unselectable="on"
+ onselectstart="return false;" 
+ onmousedown="return false;">export</button>
+<button id="reset-button" style="-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none;" 
+ unselectable="on"
+ onselectstart="return false;" 
+ onmousedown="return false;">reset</button>
+
 <body>
 <script src= "https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.min.js" type="text/javascript"></script>
 <script src= "https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/addons/p5.dom.min.js" type="text/javascript"></script>
-<script src= "https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/addons/p5.sound.min.js" type="text/javascript"></script>
 <script src = "js/prism.js" type="text/javascript"></script>
 </body>
 </html>
