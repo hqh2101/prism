@@ -33,7 +33,8 @@ function tri(){
 	noStroke();
 
 	var color = 'rgba('+rndColor()+','+rndColor()+','+rndColor()+',0.1)';
-  //draw triangle
+  
+  // console.log(x1,x2,x3,y1,y2,y3,color);
 	return [x1,x2,x3,y1,y2,y3,color];
 }
 
@@ -44,42 +45,35 @@ function rndColor(){
 function draw(){
   background(0);
   drawStrokes();
-  //draw background
-  //draw all triangles in array
-  //draw circle around mouse
   mouseCircle();
 }
 
 //_______________________________________________draw code
 
 function drawStrokes(){
-  for(let i = 0; i < strokes.length;i++){
+  for(let i = 0; i < currentStroke;i++){
     for(let j = 0; j < strokes[i].length;j++){
       fill(strokes[i][j][6]);
-      triangle(strokes[i][j][0],
-        strokes[i][j][1],
-        strokes[i][j][2],
-        strokes[i][j][3],
-        strokes[i][j][4],
-        strokes[i][j][5],);
+      triangle(strokes[i][j][0],strokes[i][j][1],strokes[i][j][2],strokes[i][j][3],strokes[i][j][4],strokes[i][j][5]);
     }
   }
 }
 
 function mousePressed(){
   var newStroke = [];
-  strokes.push(newStroke);
-  if(strokes.length !== currentStroke)
-    console.log("Stroke error");
+  if(currentStroke === strokes.length)
+    strokes.push(newStroke);
+  else if (currentStroke < strokes.length){
+    strokes[currentStroke] = newStroke;
+  }
+  currentStroke++;
+  strokes[currentStroke-1].push(tri());
 }
 
 function mouseDragged(){
-  strokes[currentStroke].push(tri());
+  strokes[currentStroke-1].push(tri());
 }
 
-function mouseReleased(){
-  currentStroke++;
-}
 
 function handleStroke(){
   var stroke = [];
@@ -91,6 +85,15 @@ function handleStroke(){
 
 //_____________________________________________end of draw code
 
+//undo
+
+function keyTyped(){
+  if(key === 'z' && currentStroke > 0){
+      currentStroke--;
+  }else if (key === 'y' && currentStroke < strokes.length){
+    
+  }
+}
 //change brush weight
 function mouseWheel(){
   if(event.delta<0)
