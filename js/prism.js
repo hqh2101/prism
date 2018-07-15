@@ -1,12 +1,16 @@
 //TODO:
 //OPTIMIZE + connect to button + automatic
-//opacity with keyboard 
 //ControlZ
-//change color
-//Performance: create a jpeg every few strokes to limt ctrl z and limit speed, then replace background image
 //Usability: show user how to use software (undo redo)
+//comment the code, then write the readme
 
-var brushSize,currentStroke,strokes,density,opacity,saving,counter,validStroke,changingBrush;
+//variables for user controls
+var brushSize,opacity,validStroke;
+//variables for basic drawing functionality of Prism
+var currentStroke,strokes,density;
+//variables for saving, exporting, optimizing
+var optFreq,counter,saving;
+
 
 var helpContainer = document.getElementById("help-container");
 var info = document.getElementById("info");
@@ -16,13 +20,16 @@ function setup(){
 	background('black');
   brushSize = 60;
   currentStroke = 0;
-  density = 5;
   strokes = [];
   opacity = 20;
   counter = 0;
   saving = false;
   validStroke = false;
-  // changingBrush = false;
+  
+  //Variables to change
+  density = 5; 
+  optFreq = 20; //TO CHANGE
+
   updateInfo();
 }
 
@@ -33,14 +40,13 @@ function windowResized() {
 
 function tri(){
   //random triangle vertices
-	let x1 = mouseX + Math.floor( (0.5-Math.random())*brushSize);
-	let x2 = mouseX + Math.floor( (0.5-Math.random())*brushSize);
+	let x1 = mouseX + Math.floor((0.5-Math.random())*brushSize);
+	let x2 = mouseX + Math.floor((0.5-Math.random())*brushSize);
 	let x3 = mouseX + Math.floor((0.5-Math.random())*brushSize);
 	let y1 = mouseY + Math.floor((0.5-Math.random())*brushSize);
 	let y2 = mouseY + Math.floor((0.5-Math.random())*brushSize);
 	let y3 = mouseY + Math.floor((0.5-Math.random())*brushSize);
 	noStroke();
-
 	var color = 'rgba('+rndColor()+','+rndColor()+','+rndColor()+',' + (opacity/100) + ')';
   
   // console.log(x1,x2,x3,y1,y2,y3,color);
@@ -53,8 +59,11 @@ function rndColor(){
 
 function draw(){
   background(0);
+
+  //draw all the current un rendered strokes
   drawStrokes();
 
+  //draw circle around mouse so doesn't interfere with saving
   if(!saving)
     mouseCircle();
   else if(saving && counter > 1){
@@ -64,14 +73,7 @@ function draw(){
   } else
      counter++;
 
-  // //old way of changing opacity
-  // if(keyIsDown(SHIFT)){
-  //   opacity = Math.ceil((1 - mouseY/windowHeight)*100);
-  //   changingBrush = true;
-  // } else
-  //   changingBrush = false;
-
-  updateInfo();
+  updateInfo(); 
 }
 
 function updateInfo(){
@@ -80,6 +82,8 @@ function updateInfo(){
 //_______________________________________________draw code
 
 function drawStrokes(){
+  console.log(strokes);
+  console.log("current stroke is " + currentStroke);
   for(let i = 0; i < currentStroke;i++){
     for(let j = 0; j < strokes[i].length;j++){
       fill(strokes[i][j][6]);
@@ -178,12 +182,7 @@ function mouseCircle(){
   push();
     stroke('white');
     strokeWeight(1);
-    // if(!changingBrush){
-      noFill();
-      ellipse(mouseX,mouseY,brushSize,brushSize);
-    // }else{
-    //   fill('rgba(255,255,255,' + opacity/100 + ')');
-    //   ellipse(windowWidth/2,windowHeight/2,brushSize,brushSize);
-    // }
+    noFill();
+    ellipse(mouseX,mouseY,brushSize,brushSize);
   pop();
 }
