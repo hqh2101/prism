@@ -1,12 +1,10 @@
 # Prism.js, a geometric art tool
 
-## Introduction:
-
-## How to use Prism:
-
-## Drawing:
-
-## Controls:
+## Instructions:
+* Changing brush size: scroll up/down
+* Changing opacity: 0-9
+* Undo: Z
+* Redo: Y
 
 ## Optimization:
 * Prism slows down after the strokes array grows too large. Since the canvas have to draw all the triangles in strokes every single frame, this takes a large toll on performance and frame rate.
